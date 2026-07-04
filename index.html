@@ -10,8 +10,7 @@
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- QR Code library -->
-  <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+
 </head>
 <body>
 <div id="root"></div>
@@ -701,7 +700,7 @@ function App() {
           <h1 className="hero-tagline">Realza tu mirada,<br/>expresa tu esencia.</h1>
           <p className="hero-sub">Servicios de extensión de pestañas, lifting, laminado de cejas y tratamientos estéticos con la más alta calidad.</p>
           <div className="hero-cta-row">
-            <a href="https://wa.me/2135226361" className="wa-btn" target="_blank" rel="noopener noreferrer"><Ico n="wa" s={17}/> Reservar cita</a>
+            <a href="https://wa.me/56921951379" className="wa-btn" target="_blank" rel="noopener noreferrer"><Ico n="wa" s={17}/> Reservar cita</a>
             <button className="btn-ghost" onClick={() => setShowShare(true)}><Ico n="share" s={15}/> Compartir catálogo</button>
           </div>
         </div>
@@ -929,7 +928,7 @@ function ServiceDetail({ service: svc, photos, onClose, onLightbox }) {
         </div>
 
         <div className="modal-actions">
-          <a href="https://wa.me/2135226361" className="wa-btn" target="_blank" rel="noopener noreferrer" style={{ fontSize:13 }}>
+          <a href="https://wa.me/56921951379" className="wa-btn" target="_blank" rel="noopener noreferrer" style={{ fontSize:13 }}>
             <Ico n="wa" s={15}/> Reservar este servicio
           </a>
         </div>
@@ -1197,18 +1196,9 @@ function PhotosModal({ serviceId, initialPhotos, onClose, onSave, showToast }) {
    SHARE MODAL (QR + enlace)
 ══════════════════════════════════════ */
 function ShareModal({ onClose, showToast }) {
-  const canvasRef = useRef(null);
   const url = window.location.href.split("?")[0];
-
-  useEffect(() => {
-    if (canvasRef.current && typeof QRCode !== "undefined") {
-      QRCode.toCanvas(canvasRef.current, url, {
-        width: 200,
-        color: { dark: "#3D2B22", light: "#FFFFFF" },
-        margin: 2,
-      }, err => { if (err) console.warn("QR error", err); });
-    }
-  }, [url]);
+  const [qrError, setQrError] = useState(false);
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=10&color=3D2B22&bgcolor=FFFFFF&data=${encodeURIComponent(url)}`;
 
   const copyLink = () => {
     navigator.clipboard.writeText(url).then(() => showToast("🔗 Enlace copiado")).catch(() => showToast("No se pudo copiar"));
@@ -1228,7 +1218,20 @@ function ShareModal({ onClose, showToast }) {
         <div style={{ padding:"24px 28px", display:"flex", flexDirection:"column", gap:20 }}>
           {/* QR */}
           <div className="share-qr-wrap">
-            <canvas ref={canvasRef} style={{ borderRadius:8 }} />
+            {!qrError ? (
+              <img
+                src={qrSrc}
+                alt="Código QR del catálogo"
+                width={200}
+                height={200}
+                style={{ borderRadius:8, background:"#fff", display:"block" }}
+                onError={() => setQrError(true)}
+              />
+            ) : (
+              <div style={{ width:200, height:200, display:"flex", alignItems:"center", justifyContent:"center", textAlign:"center", fontSize:12, color:"var(--ink-muted)", background:"#fff", borderRadius:8, padding:12 }}>
+                No se pudo generar el QR. Verifica tu conexión a internet.
+              </div>
+            )}
             <p style={{ fontSize:12, color:"var(--ink-muted)", textAlign:"center" }}>Escanea para abrir el catálogo</p>
           </div>
 
@@ -1263,7 +1266,7 @@ function ShareSection({ showToast }) {
       <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, color:"var(--charcoal)", marginBottom:8 }}>¿Te encantó algún servicio?</h3>
       <p style={{ fontSize:13.5, color:"var(--ink-soft)", marginBottom:22, lineHeight:1.6, maxWidth:380, margin:"0 auto 22px" }}>Comparte este catálogo con tus amigas o escríbeme directamente para reservar tu cita.</p>
       <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
-        <a href="https://wa.me/2135226361" className="wa-btn" target="_blank" rel="noopener noreferrer"><Ico n="wa" s={17}/> Reservar cita</a>
+        <a href="https://wa.me/56921951379" className="wa-btn" target="_blank" rel="noopener noreferrer"><Ico n="wa" s={17}/> Reservar cita</a>
         <button className="btn-gold" onClick={() => { const url = window.location.href; navigator.clipboard.writeText(url).then(() => showToast("🔗 Enlace copiado")); }}><Ico n="share" s={15}/> Compartir catálogo</button>
       </div>
     </div>
