@@ -1,25 +1,37 @@
 {
   "name": "Ángela López · Estudio Lash Designer",
-  "short_name": "Estudio AL",
-  "description": "Gestión de clientas y agenda para Ángela López Estudio Lash Designer",
-  "start_url": "/projects/",
-  "scope": "/projects/",
+  "short_name": "Estudio Lash Designer",
+  "description": "Catálogo de servicios de Ángela López · Estudio Lash Designer",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#FDF9FA",
-  "theme_color": "#EFA0C0",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
+  "background_color": "#FDF4F7",
+  "theme_color": "#F0AABF",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
