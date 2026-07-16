@@ -1905,11 +1905,16 @@ function BookingModal({ existingAppointments, onClose, showToast }) {
   const [error, setError] = useState("");
 
   const horasOcupadas = useMemo(() => {
-    return new Set(
-      existingAppointments
-        .filter(a => a.fecha === fecha && a.estado !== "cancelada")
-        .map(a => a.hora)
-    );
+    const ocupadas = new Set();
+    for (const a of existingAppointments) {
+      if (a.fecha !== fecha) continue;
+      if (a.estado === "cancelada") continue;
+      // Las citas largas (varios servicios seguidos) ocupan varias franjas de 30 min;
+      // si la cita es antigua y no tiene "bloques" guardado, se usa solo su hora como respaldo.
+      const bloques = Array.isArray(a.bloques) && a.bloques.length ? a.bloques : [a.hora];
+      bloques.forEach(h => ocupadas.add(h));
+    }
+    return ocupadas;
   }, [existingAppointments, fecha]);
 
   const minDate = dateKeyLocal(new Date());
