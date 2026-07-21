@@ -1135,7 +1135,9 @@ const CATEGORIES = [
   { id: "lifting",    label: "Lifting de pestañas",   icon: "✨" },
   { id: "laminado",   label: "Laminado de cejas",     icon: "🌿" },
   { id: "depilacion", label: "Depilación",             icon: "🌸" },
-  { id: "unas",       label: "Uñas",                  icon: "💅" },
+  { id: "manicura",   label: "Manicura",               icon: "💅" },
+  { id: "pedicura",   label: "Pedicura",               icon: "🦶" },
+  { id: "unas",       label: "Uñas",                  icon: "💎" },
   { id: "otro",       label: "Otro servicio",          icon: "⭐" },
 ];
 
@@ -1144,7 +1146,33 @@ const DEFAULT_SERVICES = [
   { id: "s2", categoria: "pestanas", nombre: "Mega Volumen Ruso", descripcion: "Efecto dramático y de máximo volumen para una mirada impactante. Utilizamos abanicos de 6 a 8 pestañas por pelo natural.", duracion: 150, precio: null, mostrarPrecio: false, beneficios: ["Look glamoroso", "Ultra voluminoso", "Larga duración"] },
   { id: "s3", categoria: "lifting",  nombre: "Lifting de Pestañas", descripcion: "Curvatura permanente de tus pestañas naturales sin extensiones. El resultado es una mirada abierta y luminosa que dura hasta 8 semanas.", duracion: 60, precio: null, mostrarPrecio: false, beneficios: ["Pestañas propias", "Hasta 8 semanas", "Sin mantenimiento"] },
   { id: "s4", categoria: "laminado", nombre: "Laminado de Cejas", descripcion: "Técnica que fija las cejas en la dirección deseada para un efecto peinado y definido. Se puede combinar con tinte para mayor intensidad.", duracion: 60, precio: null, mostrarPrecio: false, beneficios: ["Efecto peinado", "Sin relleno", "Hasta 6 semanas"] },
-  { id: "s5", categoria: "depilacion", nombre: "Depilación con Cera", descripcion: "Depilación suave y duradera con cera especial para pieles sensibles. Disponible en zonas faciales y corporales.", duracion: 30, precio: null, mostrarPrecio: false, beneficios: ["Piel suave", "Hasta 4 semanas", "Zona a elegir"] },
+
+  // ── Depilación ──
+  { id: "d1",  categoria: "depilacion", nombre: "Cejas",              descripcion: "Depilación y perfilado de cejas con cera.", duracion: 15, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d2",  categoria: "depilacion", nombre: "Cejas con pigmento", descripcion: "Perfilado de cejas con aplicación de pigmento para mayor definición.", duracion: 25, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d3",  categoria: "depilacion", nombre: "Facial completa",    descripcion: "Depilación completa del rostro.", duracion: 30, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d4",  categoria: "depilacion", nombre: "Bigote",             descripcion: "Depilación de la zona del bigote.", duracion: 10, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d5",  categoria: "depilacion", nombre: "Patillas",           descripcion: "Depilación de la zona de las patillas.", duracion: 10, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d6",  categoria: "depilacion", nombre: "Axilas",             descripcion: "Depilación de axilas con cera.", duracion: 15, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d7",  categoria: "depilacion", nombre: "Pierna completa",    descripcion: "Depilación de pierna completa con cera.", duracion: 45, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d8",  categoria: "depilacion", nombre: "Media pierna",       descripcion: "Depilación de media pierna con cera.", duracion: 30, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d9",  categoria: "depilacion", nombre: "Rebaje completo",    descripcion: "Depilación de zona íntima, rebaje completo.", duracion: 30, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d10", categoria: "depilacion", nombre: "Rebaje simple",      descripcion: "Depilación de zona íntima, rebaje simple.", duracion: 20, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "d11", categoria: "depilacion", nombre: "Brazos",             descripcion: "Depilación de brazos completos con cera.", duracion: 25, precio: null, mostrarPrecio: false, beneficios: [] },
+
+  // ── Manicura ──
+  { id: "m1", categoria: "manicura", nombre: "Manicura tradicional", descripcion: "Cuidado clásico de manos y esmaltado tradicional.", duracion: 45, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "m2", categoria: "manicura", nombre: "Manicura permanente",  descripcion: "Manicura con esmaltado semipermanente de larga duración.", duracion: 60, precio: null, mostrarPrecio: false, beneficios: ["Dura 2–3 semanas"] },
+  { id: "m3", categoria: "manicura", nombre: "Manicura spa",         descripcion: "Manicura con tratamiento spa: exfoliación e hidratación de manos.", duracion: 60, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "m4", categoria: "manicura", nombre: "Manicura Jelly Spa",   descripcion: "Manicura spa con mascarilla jelly hidratante.", duracion: 70, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "m5", categoria: "manicura", nombre: "Uñas Soft Gel",        descripcion: "Extensión de uñas con sistema soft gel.", duracion: 90, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "m6", categoria: "manicura", nombre: "Baño en gel",          descripcion: "Refuerzo de uñas naturales con baño en gel.", duracion: 45, precio: null, mostrarPrecio: false, beneficios: [] },
+
+  // ── Pedicura ──
+  { id: "p1", categoria: "pedicura", nombre: "Pedicura tradicional", descripcion: "Cuidado clásico de pies y esmaltado tradicional.", duracion: 50, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "p2", categoria: "pedicura", nombre: "Pedicura permanente",  descripcion: "Pedicura con esmaltado semipermanente de larga duración.", duracion: 60, precio: null, mostrarPrecio: false, beneficios: ["Dura 3–4 semanas"] },
+  { id: "p3", categoria: "pedicura", nombre: "Pedicura spa",         descripcion: "Pedicura con tratamiento spa: exfoliación e hidratación de pies.", duracion: 70, precio: null, mostrarPrecio: false, beneficios: [] },
+  { id: "p4", categoria: "pedicura", nombre: "Pedicura Jelly Spa",   descripcion: "Pedicura spa con mascarilla jelly hidratante.", duracion: 75, precio: null, mostrarPrecio: false, beneficios: [] },
 ];
 
 function uid(p = "s") { return `${p}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`; }
@@ -1883,10 +1911,9 @@ function ShareSection({ showToast, onOpenBooking }) {
    RESERVAR CITA (modal, escribe en la misma base de datos que la app de Ángela)
 ══════════════════════════════════════ */
 const HORAS_DISPONIBLES_CAT = [
-  "8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM",
+  "9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM",
   "12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM",
-  "3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM","6:00 PM","6:30 PM",
-  "7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM","9:30 PM","10:00 PM",
+  "3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM","6:00 PM",
 ];
 
 function dateKeyLocal(d) {
