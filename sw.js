@@ -1,8 +1,8 @@
 // Service Worker mínimo — necesario para que el navegador permita instalar la app.
-// No hace caché agresivo de contenido para evitar que Ángela vea versiones desactualizadas
-// después de que se le hagan cambios al catálogo.
+// No hace caché agresivo de contenido para evitar que los visitantes vean versiones
+// desactualizadas después de que se le hagan cambios al catálogo.
 
-const CACHE_NAME = "estudio-lash-catalogo-v1";
+const CACHE_NAME = "estudio-lash-catalogo-v2";
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
@@ -17,8 +17,6 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Estrategia: siempre intenta ir a la red primero (para que los cambios se vean de inmediato).
-// Si no hay conexión, intenta servir desde caché como respaldo básico.
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     fetch(event.request)
