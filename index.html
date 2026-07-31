@@ -26,7 +26,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
-      getFirestore, collection, addDoc, getDocs, onSnapshot, serverTimestamp
+      getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDocs, onSnapshot, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -41,7 +41,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.__firebase = { db, collection, addDoc, getDocs, onSnapshot, serverTimestamp };
+    window.__firebase = { db, collection, doc, addDoc, setDoc, deleteDoc, getDocs, onSnapshot, serverTimestamp };
     window.__firebaseReady = true;
     window.dispatchEvent(new Event("firebase-ready"));
   </script>
@@ -1223,16 +1223,45 @@ function App() {
   const [existingAppointments, setExistingAppointments] = useState([]);
 
   useEffect(() => {
-    const saved = sGet(SK.SERVICES, null);
-    setServices(saved || DEFAULT_SERVICES);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
     if (firebaseReady) return;
     const handler = () => setFirebaseReady(true);
     window.addEventListener("firebase-ready", handler);
     return () => window.removeEventListener("firebase-ready", handler);
+  }, [firebaseReady]);
+
+  // Sincroniza los servicios del catálogo con Firestore en tiempo real: si Ángela edita
+  // un servicio desde el celular, el cambio aparece solo (sin recargar) en cualquier otro
+  // dispositivo donde esté abierto el catálogo, incluyendo el de las clientas.
+  useEffect(() => {
+    if (!firebaseReady) return;
+    const { db, collection, getDocs, onSnapshot } = window.__firebase;
+
+    let cancelado = false;
+    (async () => {
+      try {
+        const snap = await getDocs(collection(db, "services"));
+        if (cancelado) return;
+        if (snap.docs.length === 0) {
+          // Primera vez que se abre el catálogo: sembrar los servicios de ejemplo en la nube.
+          for (const s of DEFAULT_SERVICES) {
+            const { id, ...data } = s;
+            await window.__firebase.setDoc(window.__firebase.doc(db, "services", id), data);
+          }
+        }
+      } catch (e) {
+        console.error("Error preparando servicios iniciales:", e);
+      } finally {
+        if (!cancelado) setLoading(false);
+      }
+    })();
+
+    const unsub = onSnapshot(collection(db, "services"), snap => {
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setServices(list);
+      setLoading(false);
+    }, err => { console.error(err); showToastRef.current && showToastRef.current("Error al sincronizar el catálogo."); setLoading(false); });
+
+    return () => { cancelado = true; unsub(); };
   }, [firebaseReady]);
 
   useEffect(() => {
@@ -1249,11 +1278,34 @@ function App() {
     setTimeout(() => setToast(null), 2500);
   }, []);
 
-  const persist = useCallback(next => {
-    const r = sSet(SK.SERVICES, next);
-    if (r === "quota") showToast("⚠️ Sin espacio disponible.");
-    setServices(next);
-  }, [showToast]);
+  // Referencia estable para poder usar showToast dentro del efecto de sincronización sin
+  // tener que agregarlo como dependencia (evita resuscribirse a Firestore innecesariamente).
+  const showToastRef = useRef(showToast);
+  useEffect(() => { showToastRef.current = showToast; }, [showToast]);
+
+  // Guarda TODOS los servicios (usado tras crear, editar o eliminar uno) directamente en Firestore.
+  const persist = useCallback(async next => {
+    if (!window.__firebase) { showToast("⚠️ Sin conexión con la nube todavía. Intenta de nuevo."); return; }
+    const { db, doc, setDoc, deleteDoc, collection, getDocs } = window.__firebase;
+    try {
+      const prevIds = new Set(services.map(s => s.id));
+      const nextIds = new Set(next.map(s => s.id));
+
+      // Guardar/actualizar cada servicio presente en la nueva lista
+      for (const s of next) {
+        const { id, ...data } = s;
+        await setDoc(doc(db, "services", id), data);
+      }
+      // Eliminar de Firestore los que ya no están en la nueva lista (servicio borrado)
+      for (const id of prevIds) {
+        if (!nextIds.has(id)) await deleteDoc(doc(db, "services", id));
+      }
+      setServices(next);
+    } catch (e) {
+      console.error(e);
+      showToast("⚠️ No se pudo guardar en la nube.");
+    }
+  }, [services, showToast]);
 
   const photosFor = useCallback(id => sGet(SK.PHOTOS + id, []), []);
 
