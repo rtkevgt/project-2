@@ -1222,6 +1222,17 @@ function App() {
   const [firebaseReady, setFirebaseReady] = useState(!!window.__firebaseReady);
   const [existingAppointments, setExistingAppointments] = useState([]);
 
+  const showToast = useCallback(msg => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  }, []);
+
+  // Referencia estable para poder usar showToast dentro de efectos que se declaran antes
+  // que la propia función (evita el error de "usada antes de declararse" y resuscribirse
+  // a Firestore cada vez que showToast cambia de identidad).
+  const showToastRef = useRef(showToast);
+  useEffect(() => { showToastRef.current = showToast; }, [showToast]);
+
   useEffect(() => {
     if (firebaseReady) return;
     const handler = () => setFirebaseReady(true);
@@ -1272,16 +1283,6 @@ function App() {
     }, err => console.error(err));
     return unsub;
   }, [firebaseReady]);
-
-  const showToast = useCallback(msg => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 2500);
-  }, []);
-
-  // Referencia estable para poder usar showToast dentro del efecto de sincronización sin
-  // tener que agregarlo como dependencia (evita resuscribirse a Firestore innecesariamente).
-  const showToastRef = useRef(showToast);
-  useEffect(() => { showToastRef.current = showToast; }, [showToast]);
 
   // Guarda TODOS los servicios (usado tras crear, editar o eliminar uno) directamente en Firestore.
   const persist = useCallback(async next => {
@@ -2218,4 +2219,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
 </html>
- 
